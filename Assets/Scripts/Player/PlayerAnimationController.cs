@@ -1,0 +1,50 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.InputSystem;
+
+public class PlayerAnimationController : MonoBehaviour
+{
+    [Header("Player Animation")]
+    [SerializeField] private Animator playerAnim;
+    [SerializeField] private PlayerController playerManager;
+
+    private void OnEnable()
+    {
+        GameInputManager.PlayerInputX += MoveAnim;
+        GameInputManager.PlayerJump += JumpAnim;
+    }
+    private void OnDisable()
+    {
+        GameInputManager.PlayerInputX -= MoveAnim;
+        GameInputManager.PlayerJump -= JumpAnim;
+    }
+    private void MoveAnim(float inputX)
+    {
+        playerAnim.SetFloat("MoveInput", inputX);
+    }
+    private void JumpAnim(InputAction.CallbackContext context)
+    {
+        if (context.ReadValueAsButton())
+        {
+            playerAnim.SetTrigger("Jump");
+        }
+    }
+    private void FallAnim()
+    {
+        if (!playerManager.IsEdge())
+        {
+            playerAnim.SetBool("Edge",false);
+            playerAnim.SetBool("Ground", playerManager.IsGround());
+        }
+        else
+        {
+            playerAnim.SetBool("Ground", true);
+            playerAnim.SetBool("Edge", playerManager.IsEdge());
+        }
+    }
+    private void Update()
+    {
+        FallAnim();
+    }
+}
