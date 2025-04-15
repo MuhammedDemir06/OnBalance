@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class GameInputManager : MonoBehaviour
 {
@@ -12,6 +13,8 @@ public class GameInputManager : MonoBehaviour
 
     //Jump
     public static System.Action<InputAction.CallbackContext> PlayerJump;
+    // Attack
+    public static System.Action<InputAction.CallbackContext> PlayerAttack;
     //input
     private GameInputSystem gameInput;
 
@@ -28,7 +31,15 @@ public class GameInputManager : MonoBehaviour
         InputX = gameInput.Player.Move.ReadValue<Vector2>().x;
         //Jump
         gameInput.Player.Jump.performed += Jump;
+        //Attack
+        gameInput.Player.Attack.performed += Attack;
     }
+    //Attack
+    private void Attack(InputAction.CallbackContext context)
+    {
+        PlayerAttack?.Invoke(context);
+    }
+
     private void MoveInput()
     {
         //Move
@@ -40,6 +51,7 @@ public class GameInputManager : MonoBehaviour
     {
         PlayerJump?.Invoke(context);
     }
+
     private void Update()
     {
         MoveInput();

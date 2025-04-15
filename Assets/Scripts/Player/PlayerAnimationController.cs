@@ -8,16 +8,27 @@ public class PlayerAnimationController : MonoBehaviour
     [Header("Player Animation")]
     [SerializeField] private Animator playerAnim;
     [SerializeField] private PlayerController playerManager;
+    [SerializeField] private PlayerAttack attackManager;
 
     private void OnEnable()
     {
         GameInputManager.PlayerInputX += MoveAnim;
         GameInputManager.PlayerJump += JumpAnim;
+        GameInputManager.PlayerAttack += AttackAnim;
     }
     private void OnDisable()
     {
         GameInputManager.PlayerInputX -= MoveAnim;
         GameInputManager.PlayerJump -= JumpAnim;
+        GameInputManager.PlayerAttack -= AttackAnim;
+    }
+    private void AttackAnim(InputAction.CallbackContext obj)
+    {
+        if (obj.ReadValueAsButton())
+        {
+            if(attackManager.CanAttack)
+                playerAnim.SetTrigger("Attack");
+        }
     }
     private void MoveAnim(float inputX)
     {

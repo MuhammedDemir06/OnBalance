@@ -5,7 +5,10 @@ using UnityEngine.InputSystem;
 
 public class PlayerController : MonoBehaviour
 {
+    public static PlayerController Instance;
+
     [Header("Player Controller")]
+    public bool IsDead;
     [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float groundDistance = 0.3f;
@@ -25,6 +28,10 @@ public class PlayerController : MonoBehaviour
     {
         GameInputManager.PlayerInputX -= Move;
         GameInputManager.PlayerJump -= Jump;
+    }
+    private void Awake()
+    {
+        Instance = this;
     }
     private void Start()
     {
