@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("Player Controller")]
     public bool IsDead;
+    [HideInInspector] public bool CanMove;
     [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private Transform groundCheck;
     [SerializeField] private float groundDistance = 0.3f;
@@ -23,11 +24,13 @@ public class PlayerController : MonoBehaviour
     {
         GameInputManager.PlayerInputX += Move;
         GameInputManager.PlayerJump += Jump;
+        PlayerHealth.PlayerDeath += Dead;
     }
     private void OnDisable()
     {
         GameInputManager.PlayerInputX -= Move;
         GameInputManager.PlayerJump -= Jump;
+        PlayerHealth.PlayerDeath -= Dead;
     }
     private void Awake()
     {
@@ -39,6 +42,8 @@ public class PlayerController : MonoBehaviour
     }
     private void Init()
     {
+        CanMove = true;
+
         rb = GetComponent<Rigidbody2D>();
     }
     private void Move(float input)
@@ -54,6 +59,12 @@ public class PlayerController : MonoBehaviour
 
         if (IsGround())
             jumpCount = maxJumpCount;
+    }
+    private void Dead()
+    {
+        IsDead = true;
+        CanMove = false;
+        Debug.LogWarning("Player Death");
     }
     private void Jump(InputAction.CallbackContext context)
     {

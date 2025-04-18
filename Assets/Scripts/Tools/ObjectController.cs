@@ -8,7 +8,8 @@ public class ObjectController : MonoBehaviour
     [SerializeField] private float deleteTime = 0.8f;
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Instantiate(objectEffect, transform.position,Quaternion.identity);
+        if (objectEffect != null)
+            Instantiate(objectEffect, transform.position, Quaternion.identity);
         Destroy(gameObject,deleteTime);
     }
 }

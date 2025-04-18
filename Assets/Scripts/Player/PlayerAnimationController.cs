@@ -9,18 +9,27 @@ public class PlayerAnimationController : MonoBehaviour
     [SerializeField] private Animator playerAnim;
     [SerializeField] private PlayerController playerManager;
     [SerializeField] private PlayerAttack attackManager;
+    [Header("Jump Effect")]
+    [SerializeField] private Animator jumpAnim;
 
     private void OnEnable()
     {
         GameInputManager.PlayerInputX += MoveAnim;
         GameInputManager.PlayerJump += JumpAnim;
         GameInputManager.PlayerAttack += AttackAnim;
+        PlayerHealth.PlayerDeath += DeadAnim;
     }
     private void OnDisable()
     {
         GameInputManager.PlayerInputX -= MoveAnim;
         GameInputManager.PlayerJump -= JumpAnim;
         GameInputManager.PlayerAttack -= AttackAnim;
+        PlayerHealth.PlayerDeath -= DeadAnim;
+    }
+    private void DeadAnim()
+    {
+        playerAnim.SetTrigger("Death");
+
     }
     private void AttackAnim(InputAction.CallbackContext obj)
     {
@@ -39,6 +48,7 @@ public class PlayerAnimationController : MonoBehaviour
         if (context.ReadValueAsButton())
         {
             playerAnim.SetTrigger("Jump");
+            jumpAnim.SetTrigger("Jump");
         }
     }
     private void FallAnim()

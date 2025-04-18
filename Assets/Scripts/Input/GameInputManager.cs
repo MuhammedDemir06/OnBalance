@@ -37,21 +37,24 @@ public class GameInputManager : MonoBehaviour
     //Attack
     private void Attack(InputAction.CallbackContext context)
     {
-        PlayerAttack?.Invoke(context);
+        if (PlayerController.Instance.CanMove)
+            PlayerAttack?.Invoke(context);
     }
-
     private void MoveInput()
     {
         //Move
-        InputX = Input.GetAxis("Horizontal");
-        PlayerInputX?.Invoke(InputX);
+        if (PlayerController.Instance.CanMove)
+        {
+            InputX = Input.GetAxis("Horizontal");
+            PlayerInputX?.Invoke(InputX);
+        }    
     }
     //Jump
     private void Jump(InputAction.CallbackContext context)
     {
-        PlayerJump?.Invoke(context);
+        if (PlayerController.Instance.CanMove)
+            PlayerJump?.Invoke(context);
     }
-
     private void Update()
     {
         MoveInput();
