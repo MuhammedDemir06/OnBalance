@@ -8,9 +8,12 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float attackTime = 1;
     [SerializeField] private float attackDistance = 1;
     [SerializeField] private Transform startPos;
+    [HideInInspector] public int DamageAmount = 5;
     private int reverseAxis;
     private float delay;
     public bool CanAttack;
+
+    [SerializeField] private GameObject hitEffectPrefab;
 
     private void OnEnable()
     {
@@ -22,7 +25,10 @@ public class PlayerAttack : MonoBehaviour
         GameInputManager.PlayerAttack -= AttackButton;
         GameInputManager.PlayerInputX -= AttackDirection;
     }
-
+    private void Start()
+    {
+        DamageAmount = 1;
+    }
     private void AttackButton(InputAction.CallbackContext obj)
     {
         if(obj.ReadValueAsButton())
@@ -59,11 +65,16 @@ public class PlayerAttack : MonoBehaviour
 
         if (hit.collider != null && CanAttack)
         {
-            Debug.Log("Trigger");
+            if(hit.collider.GetComponent<Damageable>()!=null)
+            {
+                hit.collider.GetComponent<Damageable>().Damage(DamageAmount);            
+            }
         }
     }
     public void Update()
     {
+        if (GameManager.Instance.GamePaused)
+            return;
         AttackDelay();
        // Attack();
     }

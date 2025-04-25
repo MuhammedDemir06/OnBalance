@@ -5,7 +5,7 @@ using UnityEngine;
 public class PlayerHealth : MonoBehaviour,Damageable,Healthable
 {
     public static System.Action PlayerDeath;
-    public static System.Action<int> HealthAmount;
+    public static System.Action<int,bool> HealthAmount;
 
     [SerializeField] private int maxHealth = 100;
     [Header("Death Effect")]
@@ -28,7 +28,7 @@ public class PlayerHealth : MonoBehaviour,Damageable,Healthable
                 currentHealth = 0;
                 PlayerDeath?.Invoke();
             }
-            HealthAmount?.Invoke(damage);
+            HealthAmount?.Invoke(damage,false);
             Debug.Log("Current Health :" + currentHealth);
         }
     }
@@ -40,7 +40,7 @@ public class PlayerHealth : MonoBehaviour,Damageable,Healthable
         {
             currentHealth = maxHealth;
         }
-        HealthAmount?.Invoke(health);
+        HealthAmount?.Invoke(health,true);
         Debug.Log("Current Health :" + currentHealth);
     }
 }

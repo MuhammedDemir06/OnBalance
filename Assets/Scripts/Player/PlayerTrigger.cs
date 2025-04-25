@@ -21,4 +21,17 @@ public class PlayerTriggger : MonoBehaviour
         if (interact != null)
             interact.Interact();
     }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        var notInteract = collision.gameObject.GetComponent<NotInteractable>();
+        if (notInteract != null)
+            notInteract.NotInteract();
+    }
+    private void OnCollisionExit2D(Collision2D collision)
+    {
+        var notInteract = collision.gameObject.GetComponent<NotInteractable>();
+        if (notInteract != null)
+            notInteract.NotInteract();
+    }
 }

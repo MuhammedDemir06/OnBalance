@@ -16,21 +16,26 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private LayerMask groundLayer;
     [SerializeField] private LayerMask wallLayer;
     [Header("Jump")]
-    [SerializeField] private float jumpForce = 5;
+    public float JumpForce = 5;
     [SerializeField] private int maxJumpCount = 2;
     private int jumpCount;
+    [Header("Charge Effect")]
+    [SerializeField] private float powerOfCharge = 5f;
+    [SerializeField] private GameObject chargedEffect;
     private Rigidbody2D rb;
     private void OnEnable()
     {
         GameInputManager.PlayerInputX += Move;
         GameInputManager.PlayerJump += Jump;
         PlayerHealth.PlayerDeath += Dead;
+        GameInputManager.PlayerPower += Charged;
     }
     private void OnDisable()
     {
         GameInputManager.PlayerInputX -= Move;
         GameInputManager.PlayerJump -= Jump;
         PlayerHealth.PlayerDeath -= Dead;
+        GameInputManager.PlayerPower -= Charged;
     }
     private void Awake()
     {
@@ -44,6 +49,8 @@ public class PlayerController : MonoBehaviour
     {
         CanMove = true;
 
+        JumpForce = 3.5f;
+
         rb = GetComponent<Rigidbody2D>();
     }
     private void Move(float input)
@@ -55,10 +62,28 @@ public class PlayerController : MonoBehaviour
             newScale.x = 1;
         else if (input < 0)
             newScale.x = -1;
+
         transform.localScale = newScale;
 
         if (IsGround())
             jumpCount = maxJumpCount;
+    }
+    private void Charged(InputAction.CallbackContext context,float input)
+    {
+        if (context.ReadValueAsButton()&& !IsDead && UIManager.Instance.PowerAmount > 99)
+        {
+            var newEffect = Instantiate(chargedEffect, transform.position, Quaternion.identity);
+            var effectScale = newEffect.transform.localScale;
+
+            if (input > 0)
+                effectScale.x = 1;
+            else if (input < 0)
+                effectScale.x = -1;
+
+            newEffect.transform.localScale = effectScale;
+
+            transform.position += Vector3.right * input * powerOfCharge * Time.deltaTime;
+        }
     }
     private void Dead()
     {
@@ -70,7 +95,7 @@ public class PlayerController : MonoBehaviour
     {
         if (context.ReadValueAsButton() && jumpCount > 0)
         {
-            rb.velocity = new Vector2(rb.velocity.x, jumpForce);
+            rb.velocity = new Vector2(rb.velocity.x, JumpForce);
             jumpCount --;
         }
     }

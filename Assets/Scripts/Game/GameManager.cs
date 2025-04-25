@@ -12,9 +12,16 @@ public class GameManager : MonoBehaviour
     private float scoreValue;
     [Header("Coin")]
     public int Coin;
+    [HideInInspector] public int CoinBooster = 1;
+    [Header("Game")]
+    public bool GamePaused;
     private void Awake()
     {
         Instance = this;
+    }
+    private void Start()
+    {
+        CoinBooster = 1;
     }
     public void UpdateScore()
     {
@@ -27,10 +34,16 @@ public class GameManager : MonoBehaviour
     public void UpdateCoin()
     {
         if (!PlayerController.Instance.IsDead)
-            Coin += 1;
+            Coin += 1 * CoinBooster;
+    }
+    public void StoreCoin(int amount)
+    {
+        Coin -= amount;
     }
     private void Update()
     {
+        if (GamePaused)
+            return;
         UpdateScore();
     }
 }

@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using static UnityEditor.Timeline.TimelinePlaybackControls;
 
 public class GameInputManager : MonoBehaviour
 {
@@ -15,6 +14,8 @@ public class GameInputManager : MonoBehaviour
     public static System.Action<InputAction.CallbackContext> PlayerJump;
     // Attack
     public static System.Action<InputAction.CallbackContext> PlayerAttack;
+    //Power
+    public static System.Action<InputAction.CallbackContext,float> PlayerPower;
     //input
     private GameInputSystem gameInput;
 
@@ -33,12 +34,18 @@ public class GameInputManager : MonoBehaviour
         gameInput.Player.Jump.performed += Jump;
         //Attack
         gameInput.Player.Attack.performed += Attack;
+        //Power
+        gameInput.Player.Power.performed += Power;
     }
     //Attack
     private void Attack(InputAction.CallbackContext context)
     {
         if (PlayerController.Instance.CanMove)
             PlayerAttack?.Invoke(context);
+    }
+    private void Power(InputAction.CallbackContext context)
+    {
+        PlayerPower?.Invoke(context,InputX);
     }
     private void MoveInput()
     {
@@ -57,6 +64,9 @@ public class GameInputManager : MonoBehaviour
     }
     private void Update()
     {
+        if (GameManager.Instance.GamePaused)
+            return;
+
         MoveInput();
     }
 }

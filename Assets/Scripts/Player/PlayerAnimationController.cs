@@ -29,7 +29,6 @@ public class PlayerAnimationController : MonoBehaviour
     private void DeadAnim()
     {
         playerAnim.SetTrigger("Death");
-
     }
     private void AttackAnim(InputAction.CallbackContext obj)
     {
