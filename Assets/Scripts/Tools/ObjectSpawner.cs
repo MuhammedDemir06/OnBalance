@@ -8,6 +8,7 @@ public class ObjectSpawner : MonoBehaviour
     [SerializeField] private GameObject objectPrefab;
     [SerializeField] private float spawnRangeX;
     public float SpawnTime = 3f;
+    public bool Active = true;
     private void Start()
     {
         StartCoroutine(Spawner());

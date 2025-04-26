@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class PlayerTriggger : MonoBehaviour
 {
+    [Header("Sounds")]
+    [SerializeField] private AudioSource triggerSound;
     private void OnCollisionEnter2D(Collision2D collision)
     {
         var interact = collision.gameObject.GetComponent<Interactable>();
@@ -12,6 +14,9 @@ public class PlayerTriggger : MonoBehaviour
 
         if(collision.gameObject.tag=="Coin")
         {
+            if (triggerSound.enabled)
+                triggerSound.Play();
+
             GameManager.Instance.UpdateCoin();
         }
     }

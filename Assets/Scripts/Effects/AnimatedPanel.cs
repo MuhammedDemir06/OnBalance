@@ -21,6 +21,9 @@ public class AnimatedPanel : MonoBehaviour
 
     private Vector3 originalScale;
 
+    [Header("Sound")]
+    [SerializeField] private AudioSource openingSound;
+
     private void Start()
     {
         if (targetPanel == null) return;
@@ -45,6 +48,8 @@ public class AnimatedPanel : MonoBehaviour
     {
         if (targetPanel == null) return;
 
+        if (openingSound.enabled)
+            openingSound.Play();
         targetPanel.gameObject.SetActive(true);
         targetPanel.localScale = Vector3.zero;
         targetPanel.DOScale(originalScale, animationDuration).SetEase(openEase);

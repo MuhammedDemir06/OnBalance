@@ -13,7 +13,7 @@ public class ChestController : MonoBehaviour,Damageable
     public void Damage(int damageAmount)
     {
         healthAmount = healthAmount - damageAmount;
-        healthImage.fillAmount -= (float)healthAmount / 10;
+        healthImage.DOFillAmount((float)healthAmount / 10, 0.1f);
         if (healthAmount<=0)
         {
             Invoke(nameof(TakeDamage), 0.6f);
@@ -24,6 +24,7 @@ public class ChestController : MonoBehaviour,Damageable
         Debug.Log("Destroyed Chest");
         Instantiate(effectPrefab, transform.position, Quaternion.identity);
         StagesManager.Instance.UpdateChestCount(true);
+        GameManager.Instance.UpdateCoin();
         Destroy(gameObject);
     }
 }

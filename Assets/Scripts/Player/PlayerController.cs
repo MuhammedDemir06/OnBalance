@@ -23,6 +23,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float powerOfCharge = 5f;
     [SerializeField] private GameObject chargedEffect;
     private Rigidbody2D rb;
+    [Header("Sounds")]
+    [SerializeField] private AudioSource powerSound;
     private void OnEnable()
     {
         GameInputManager.PlayerInputX += Move;
@@ -70,8 +72,10 @@ public class PlayerController : MonoBehaviour
     }
     private void Charged(InputAction.CallbackContext context,float input)
     {
-        if (context.ReadValueAsButton()&& !IsDead && UIManager.Instance.PowerAmount > 99)
+        if (context.ReadValueAsButton() && !IsDead && UIManager.Instance.PowerAmount > 98)
         {
+            if (powerSound.enabled)
+                powerSound.Play();
             var newEffect = Instantiate(chargedEffect, transform.position, Quaternion.identity);
             var effectScale = newEffect.transform.localScale;
 
@@ -82,7 +86,7 @@ public class PlayerController : MonoBehaviour
 
             newEffect.transform.localScale = effectScale;
 
-            transform.position += Vector3.right * input * powerOfCharge * Time.deltaTime;
+            transform.position += Vector3.right * input * powerOfCharge;
         }
     }
     private void Dead()

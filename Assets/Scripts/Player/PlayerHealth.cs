@@ -10,6 +10,8 @@ public class PlayerHealth : MonoBehaviour,Damageable,Healthable
     [SerializeField] private int maxHealth = 100;
     [Header("Death Effect")]
     [SerializeField] private GameObject deathEffect;
+    [Header("Sounds")]
+    [SerializeField] private AudioSource damageSound;
     private int currentHealth;
     private void Start()
     {
@@ -19,6 +21,9 @@ public class PlayerHealth : MonoBehaviour,Damageable,Healthable
     {
         if(!PlayerController.Instance.IsDead)
         {
+            if (damageSound.enabled)
+                damageSound.Play();
+
             PlayerCameraShake.Instance.StartShake(0.3f, 0.2f);
             currentHealth -= damage;
             Instantiate(deathEffect, transform.position, Quaternion.identity);
@@ -34,7 +39,8 @@ public class PlayerHealth : MonoBehaviour,Damageable,Healthable
     }
     public void TakeHealth(int health)
     {
-        currentHealth += health;
+        if (currentHealth < maxHealth)
+            currentHealth += health;
 
         if(currentHealth >= maxHealth)
         {

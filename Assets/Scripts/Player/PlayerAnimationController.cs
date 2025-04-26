@@ -34,7 +34,7 @@ public class PlayerAnimationController : MonoBehaviour
     {
         if (obj.ReadValueAsButton())
         {
-            if(attackManager.CanAttack)
+            if (attackManager.CanAttack && !GameManager.Instance.GamePaused && !PlayerController.Instance.IsDead)
                 playerAnim.SetTrigger("Attack");
         }
     }

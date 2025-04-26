@@ -14,13 +14,16 @@ public class InteractStore : MonoBehaviour,Interactable,NotInteractable
     [Header("UI")]
     [SerializeField] private List<UpgradeableItemBooster> upgradeableItems;
     [SerializeField] private AnimatedPanel warningPanel;
+    [SerializeField] private AudioSource purchasedSound;
 
     public void Interact()
     {
+        GameManager.Instance.CursorActive(true);
         animatedPanel.Show();
     }
     public void NotInteract()
     {
+        GameManager.Instance.CursorActive(false);
         animatedPanel.Hide();
     }
     private void Start()
@@ -65,6 +68,8 @@ public class InteractStore : MonoBehaviour,Interactable,NotInteractable
                 upgradeableItems[index].CurrentNumText.text = "Max";
 
             Debug.Log("Upgraded");
+            if (purchasedSound.enabled)
+                purchasedSound.Play();
         }
         else
         {

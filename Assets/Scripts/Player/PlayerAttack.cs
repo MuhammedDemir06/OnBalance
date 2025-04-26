@@ -9,12 +9,11 @@ public class PlayerAttack : MonoBehaviour
     [SerializeField] private float attackDistance = 1;
     [SerializeField] private Transform startPos;
     [HideInInspector] public int DamageAmount = 5;
+    [Header("Sound")]
+    [SerializeField] private AudioSource attackSound;
     private int reverseAxis;
     private float delay;
     public bool CanAttack;
-
-    [SerializeField] private GameObject hitEffectPrefab;
-
     private void OnEnable()
     {
         GameInputManager.PlayerAttack += AttackButton;
@@ -59,6 +58,9 @@ public class PlayerAttack : MonoBehaviour
     }
     private void Attack()
     {
+        if (GameManager.Instance.GamePaused || PlayerController.Instance.IsDead)
+            return;
+
         RaycastHit2D hit = Physics2D.Raycast(startPos.position, transform.right, attackDistance * reverseAxis);
 
         Debug.DrawRay(startPos.position, transform.right * attackDistance*reverseAxis, Color.red);
@@ -67,9 +69,11 @@ public class PlayerAttack : MonoBehaviour
         {
             if(hit.collider.GetComponent<Damageable>()!=null)
             {
-                hit.collider.GetComponent<Damageable>().Damage(DamageAmount);            
+                hit.collider.GetComponent<Damageable>().Damage(DamageAmount);   
             }
         }
+        if (attackSound.enabled)
+            attackSound.Play();
     }
     public void Update()
     {

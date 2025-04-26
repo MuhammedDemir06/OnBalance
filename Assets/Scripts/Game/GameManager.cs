@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using UnityEngine;
 
 public class GameManager : MonoBehaviour
@@ -8,6 +9,7 @@ public class GameManager : MonoBehaviour
 
     [Header("Score")]
     public int Score;
+    public int MaxScore;
     public float ScoreBooster = 2;
     private float scoreValue;
     [Header("Coin")]
@@ -22,6 +24,27 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         CoinBooster = 1;
+
+        GetData();
+        CursorActive(false);
+    }
+    private void GetData()
+    {
+        MaxScore = PlayerPrefs.GetInt("Max Score");
+    }
+    public void CursorActive(bool active)
+    {
+        if (active)
+        {
+            Cursor.visible = true;
+            Cursor.lockState = CursorLockMode.None;
+        }
+            
+        else
+        {
+            Cursor.visible = false;
+            Cursor.lockState = CursorLockMode.Locked;
+        }
     }
     public void UpdateScore()
     {
@@ -46,4 +69,13 @@ public class GameManager : MonoBehaviour
             return;
         UpdateScore();
     }
+
+#if UNITY_EDITOR
+    [UnityEditor.MenuItem("Game/Delete Current Data")]
+    public static void DeleteData()
+    {
+        PlayerPrefs.DeleteAll();
+        Debug.Log("Deleted All Data");
+    }
+#endif
 }

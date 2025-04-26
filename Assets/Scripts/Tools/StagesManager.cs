@@ -60,7 +60,7 @@ public class StagesManager : MonoBehaviour
 
             if (stageImage.fillAmount > 0f && currentChest == maxChest)
             { 
-                NextStage();
+                Invoke(nameof(NextStage),0.3f);
                 Invoke(nameof(SpawnChest), 0.3f);
             }
             else if(stageImage.fillAmount == 0f)
@@ -87,7 +87,7 @@ public class StagesManager : MonoBehaviour
     }
     private void UpdateStageImageFill()
     {
-        if (PlayerController.Instance.IsDead && GameManager.Instance.GamePaused)
+        if (PlayerController.Instance.IsDead || GameManager.Instance.GamePaused)
             return;
 
         if (stageImage.fillAmount > 0)
