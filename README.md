@@ -1,2 +1,2 @@
 My First Game Jam Project(WebGL Build),I hope you like it
-Gameplay Video:https://www.youtube.com/@issoeEnt/videos
+Gameplay Video:https://www.youtube.com/@issoeEnt/videos  [Unity 2023.2.20f1]
